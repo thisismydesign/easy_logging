@@ -31,7 +31,7 @@ Or install it yourself as:
 
 ## Usage
 
-In any class you want to extend with logging functionality:
+Add `include EasyLogging` to any class you want to extend with logging functionality.
 
 ```ruby
 require 'easy_logging'
