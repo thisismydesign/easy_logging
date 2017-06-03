@@ -44,11 +44,24 @@ class YourClass
     logger.info 'something happened'
   end
 end
+
+class YourOtherClass
+  include EasyLogging
+
+  def self.do_something
+    # ...
+    logger.info 'something happened'
+  end
+end
+
+YourClass.new.do_something
+YourOtherClass.do_something
 ```
 
 Output:
 ```
-I, [2017-06-03T21:45:46.764662 #5476]  INFO -- YourClass: something happened
+I, [2017-06-03T21:59:25.160686 #5900]  INFO -- YourClass: something happened
+I, [2017-06-03T21:59:25.160686 #5900]  INFO -- YourOtherClass: something happened
 ```
 
 ## Feedback
