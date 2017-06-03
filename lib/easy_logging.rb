@@ -7,7 +7,7 @@ module EasyLogging
   @loggers = {}
 
   def logger
-    EasyLogging.logger
+    @logger ||= EasyLogging.logger_for(self.class.name)
   end
 
   # Executed when the module is included. See: https://stackoverflow.com/a/5160822/2771889
@@ -16,10 +16,6 @@ module EasyLogging
     def base.logger
       @logger ||= EasyLogging.logger_for(self)
     end
-  end
-
-  def logger
-    @logger ||= EasyLogging.logger_for(self.class.name)
   end
 
   # Global, memoized, lazy initialized instance of a logger
