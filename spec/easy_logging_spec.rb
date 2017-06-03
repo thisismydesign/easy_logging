@@ -1,16 +1,18 @@
 require "spec_helper"
 
-class TestClass
-  include EasyLogging
-end
-
-class TestClass2
-  include EasyLogging
-end
-
 RSpec.describe EasyLogging do
   it "has a version number" do
     expect(EasyLogging::VERSION).not_to be nil
+  end
+
+  before :each do
+    class TestClass
+      include EasyLogging
+    end
+
+    class TestClass2
+      include EasyLogging
+    end
   end
 
   context "instance of a class that includes EasyLogging" do
