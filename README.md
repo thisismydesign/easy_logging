@@ -7,6 +7,12 @@
 | Release | [![Build Status](https://travis-ci.org/thisismydesign/easy_logging.svg?branch=release)](https://travis-ci.org/thisismydesign/easy_logging)   [![Coverage Status](https://coveralls.io/repos/github/thisismydesign/easy_logging/badge.svg?branch=release)](https://coveralls.io/github/thisismydesign/easy_logging?branch=release)   [![Gem Version](https://badge.fury.io/rb/easy_logging.svg)](https://badge.fury.io/rb/easy_logging)   [![Total Downloads](http://ruby-gem-downloads-badge.herokuapp.com/easy_logging?type=total)](https://rubygems.org/gems/easy_logging) |
 | Development | [![Build Status](https://travis-ci.org/thisismydesign/easy_logging.svg?branch=master)](https://travis-ci.org/thisismydesign/easy_logging)   [![Coverage Status](https://coveralls.io/repos/github/thisismydesign/easy_logging/badge.svg?branch=master)](https://coveralls.io/github/thisismydesign/easy_logging?branch=master) |
 
+## Features
+
+- Adds logging functionality to any class with one, short, self-descriptive command
+- Logger works in both class and instance methods
+- Logger is specific to class and contains class name
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -33,8 +39,16 @@ require 'easy_logging'
 class YourClass
   include EasyLogging
 
-  # ...
+  def do_something
+    # ...
+    logger.info 'something happened'
+  end
 end
+```
+
+Output:
+```
+I, [2017-06-03T21:45:46.764662 #5476]  INFO -- YourClass: something happened
 ```
 
 ## Feedback
