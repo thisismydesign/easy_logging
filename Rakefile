@@ -5,7 +5,7 @@ RSpec::Core::RakeTask.new(:spec)
 
 desc "Check if source can be required locally"
 task :require do
-  sh "ruby -e \"require '#{File.dirname __FILE__}/lib/json/streamer'\""
+  sh "ruby -e \"require '#{File.dirname __FILE__}/lib/easy_logging'\""
 end
 
 task :default => [:require, :spec]
