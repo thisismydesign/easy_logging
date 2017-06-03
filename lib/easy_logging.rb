@@ -11,4 +11,12 @@ module EasyLogging
   def self.logger
     @logger ||= Logger.new(STDOUT)
   end
+
+  def self.included(base)
+    class << base
+      def logger
+        EasyLogging.logger
+      end
+    end
+  end
 end
