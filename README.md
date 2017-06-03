@@ -1,8 +1,11 @@
 # EasyLogging
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/easy_logging`. To experiment with that code, run `bin/console` for an interactive prompt.
+#### Ruby utility that lets you include logging in your classes easily, without redundancy.
 
-TODO: Delete this and the text above, and describe your gem
+| Branch | Status |
+| ------ | ------ |
+| Release | [![Build Status](https://travis-ci.org/thisismydesign/easy_logging.svg?branch=release)](https://travis-ci.org/thisismydesign/easy_logging)   [![Coverage Status](https://coveralls.io/repos/github/thisismydesign/easy_logging/badge.svg?branch=release)](https://coveralls.io/github/thisismydesign/easy_logging?branch=release)   [![Gem Version](https://badge.fury.io/rb/easy_logging.svg)](https://badge.fury.io/rb/easy_logging)   [![Total Downloads](http://ruby-gem-downloads-badge.herokuapp.com/easy_logging?type=total)](https://rubygems.org/gems/easy_logging) |
+| Development | [![Build Status](https://travis-ci.org/thisismydesign/easy_logging.svg?branch=master)](https://travis-ci.org/thisismydesign/easy_logging)   [![Coverage Status](https://coveralls.io/repos/github/thisismydesign/easy_logging/badge.svg?branch=master)](https://coveralls.io/github/thisismydesign/easy_logging?branch=master) |
 
 ## Installation
 
@@ -22,7 +25,17 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+In any class you want to extend with logging functionality:
+
+```ruby
+require 'easy_logging'
+
+class YourClass
+  include EasyLogging
+
+  # ...
+end
+```
 
 ## Feedback
 
@@ -38,7 +51,7 @@ This gem is developed using Bundler conventions. A good overview can be found [h
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/easy_logging.
+Bug reports and pull requests are welcome on GitHub at https://github.com/thisismydesign/easy_logging.
 
 ## License
 
