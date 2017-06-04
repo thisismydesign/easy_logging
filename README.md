@@ -13,6 +13,25 @@
 - Logger works in both class and instance methods
 - Logger is specific to class and contains class name
 
+### Logger configuration
+
+- Logs to STDOUT
+- Contains classname
+
+Excerpt:
+
+```ruby
+def self.configure_logger_for(classname)
+  logger = Logger.new(STDOUT)
+  logger.progname = classname
+  logger
+end
+```
+
+### Possible improvements
+
+- Make logger configurable (especially the output)
+
 ## Installation
 
 Add this line to your application's Gemfile:
