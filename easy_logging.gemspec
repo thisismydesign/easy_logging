@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["thisismydesign"]
   spec.email         = ["thisismydesign@users.noreply.github.com"]
 
-  spec.summary       = "Include logging in your classes easily, without redundancy."
+  spec.summary       = "Include logging anywhere easily, without redundancy."
   spec.homepage      = "https://github.com/thisismydesign/easy_logging"
 
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|

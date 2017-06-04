@@ -1,6 +1,6 @@
 # EasyLogging
 
-#### Ruby utility that lets you include logging in your classes easily, without redundancy.
+#### Ruby utility that lets you include logging anywhere easily, without redundancy.
 
 | Branch | Status |
 | ------ | ------ |
@@ -9,7 +9,7 @@
 
 ## Features
 
-- Adds logging functionality to any class with one, short, self-descriptive command
+- Adds logging functionality anywhere with one, short, self-descriptive command
 - Logger works in both class and instance methods
 - Logger is specific to class and contains class name
 
@@ -50,7 +50,7 @@ Or install it yourself as:
 
 ## Usage
 
-Add `include EasyLogging` to any class you want to extend with logging functionality.
+Add `include EasyLogging` to any context (e.g. a class) you want to extend with logging functionality.
 
 ```ruby
 require 'easy_logging'
