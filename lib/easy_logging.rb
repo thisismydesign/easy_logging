@@ -4,6 +4,7 @@ require_relative "easy_logging/version"
 
 module EasyLogging
 
+  @log_destination = nil
   @loggers = {}
 
   def logger
@@ -24,9 +25,17 @@ module EasyLogging
   end
 
   def self.configure_logger_for(classname)
-    logger = Logger.new(STDOUT)
+    logger = Logger.new(log_destination)
     logger.progname = classname
     logger
+  end
+
+  def self.log_destination= dest
+    @log_destination = dest
+  end
+
+  def self.log_destination
+    @log_destination || ( log_destinaiton = ENV['LOGFILE'] || STDOUT )
   end
 
 end

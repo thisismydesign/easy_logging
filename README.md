@@ -15,18 +15,36 @@
 
 ### Logger configuration
 
-- Logs to STDOUT
-- Contains classname
+You can configure the logger to log to a logfile via environment variables
+or by directly setting the attribute in `EasyLogging.log_destination`
 
-Excerpt:
+
+Example :
 
 ```ruby
-def self.configure_logger_for(classname)
-  logger = Logger.new(STDOUT)
-  logger.progname = classname
-  logger
+require 'easy_logging'
+EasyLogging.log_destination = '/var/log/easy_application.log'
+
+class EasyApplication
+  include EasyLogging
+
+  def self.run
+    logger.info 'Your Applicaiton has run'
+  end
 end
+
+if __FILE__ == $0
+  EasyApplication.run
+end
+
 ```
+
+Output:
+
+```
+I, [2017-06-03T21:59:25.160686 #5900]  INFO -- EasyApplication: Your Application has run
+```
+
 
 ### Possible improvements
 
