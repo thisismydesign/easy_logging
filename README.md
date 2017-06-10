@@ -12,43 +12,7 @@
 - Adds logging functionality anywhere with one, short, self-descriptive command
 - Logger works in both class and instance methods
 - Logger is specific to class and contains class name
-
-### Logger configuration
-
-You can configure the logger to log to a logfile via environment variables
-or by directly setting the attribute in `EasyLogging.log_destination`
-
-
-Example :
-
-```ruby
-require 'easy_logging'
-EasyLogging.log_destination = '/var/log/easy_application.log'
-
-class EasyApplication
-  include EasyLogging
-
-  def self.run
-    logger.info 'Your Applicaiton has run'
-  end
-end
-
-if __FILE__ == $0
-  EasyApplication.run
-end
-
-```
-
-Output:
-
-```
-I, [2017-06-03T21:59:25.160686 #5900]  INFO -- EasyApplication: Your Application has run
-```
-
-
-### Possible improvements
-
-- Make logger configurable (especially the output)
+- Logger is configurable to use standard streams or file
 
 ## Installation
 
@@ -72,6 +36,7 @@ Add `include EasyLogging` to any context (e.g. a class) you want to extend with 
 
 ```ruby
 require 'easy_logging'
+EasyLogging.log_destination = 'app.log'
 
 class YourClass
   include EasyLogging
@@ -100,6 +65,28 @@ Output:
 I, [2017-06-03T21:59:25.160686 #5900]  INFO -- YourClass: something happened
 I, [2017-06-03T21:59:25.160686 #5900]  INFO -- YourOtherClass: something happened
 ```
+
+## Configuration
+
+\[Will be included in [v0.2.0](https://github.com/thisismydesign/easy_logging/releases/tag/v0.2.0)]
+
+You have several ways to configure the logger device:
+
+- directly via the EasyLogging module
+
+`EasyLogging.log_destination = 'app.log'`
+
+- via environment variable `LOGFILE`
+
+`LOGFILE='app.log'`
+
+- Otherwise it will default to `STDOUT`
+
+Important notes:
+- Log destination setting is global for all loggers
+- It is recommended to require EasyLogging and set the logger up properly in the initial setup of your application before any logging activity
+- Changing log destination on the fly will affect all future and not yet used loggers, however already used ones will log to the original destination
+- Modifying `EasyLogging.log_destination` directly will overwrite previous values, however modifying the environment variable will not overwrite the direct setting. Default value is overwritten in both cases.
 
 ## Feedback
 
