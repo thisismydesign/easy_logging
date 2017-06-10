@@ -35,7 +35,7 @@ module EasyLogging
   end
 
   def self.log_destination
-    @log_destination || ( log_destinaiton = ENV['LOGFILE'] || STDOUT )
+    @log_destination or STDOUT
   end
 
 end

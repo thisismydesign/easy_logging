@@ -70,23 +70,16 @@ I, [2017-06-03T21:59:25.160686 #5900]  INFO -- YourOtherClass: something happene
 
 \[Will be included in [v0.2.0](https://github.com/thisismydesign/easy_logging/releases/tag/v0.2.0)]
 
-You have several ways to configure the logger device:
-
-- directly via the EasyLogging module
+You can configure log destination as:
 
 `EasyLogging.log_destination = 'app.log'`
 
-- via environment variable `LOGFILE`
-
-`LOGFILE='app.log'`
-
-- Otherwise it will default to `STDOUT`
+Otherwise it will default to `STDOUT`.
 
 Important notes:
 - Log destination setting is global for all loggers
 - It is recommended to require EasyLogging and set the logger up properly in the initial setup of your application before any logging activity
 - Changing log destination on the fly will affect all future and not yet used loggers, however already used ones will log to the original destination
-- Modifying `EasyLogging.log_destination` directly will overwrite previous values, however modifying the environment variable will not overwrite the direct setting. Default value is overwritten in both cases.
 
 ## Feedback
 
