@@ -68,7 +68,7 @@ I, [2017-06-03T21:59:25.160686 #5900]  INFO -- YourOtherClass: something happene
 
 ## Configuration
 
-\[Will be included in [v0.2.0](https://github.com/thisismydesign/easy_logging/releases/tag/v0.2.0)]
+\[Since [v0.2.0](https://github.com/thisismydesign/easy_logging/releases/tag/v0.2.0)]
 
 You can configure log destination as:
 
