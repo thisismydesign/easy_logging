@@ -11,6 +11,12 @@ module EasyLogging
     @logger ||= EasyLogging.logger_for(self.class.name)
   end
 
+  def self.log_destination= dest
+    @log_destination = dest
+  end
+
+private
+
   # Executed when the module is included. See: https://stackoverflow.com/a/5160822/2771889
   def self.included(base)
     # Class level logger method for includer class (base)
@@ -28,10 +34,6 @@ module EasyLogging
     logger = Logger.new(log_destination)
     logger.progname = classname
     logger
-  end
-
-  def self.log_destination= dest
-    @log_destination = dest
   end
 
   def self.log_destination
