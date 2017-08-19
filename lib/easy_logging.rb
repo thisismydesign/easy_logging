@@ -4,7 +4,7 @@ require_relative "easy_logging/version"
 
 module EasyLogging
 
-  @log_destination = nil
+  @log_destination = STDOUT
   @loggers = {}
 
   def logger
@@ -37,7 +37,7 @@ private
   end
 
   def self.log_destination
-    @log_destination or STDOUT
+    @log_destination
   end
 
 end
