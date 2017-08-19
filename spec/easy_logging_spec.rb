@@ -190,4 +190,34 @@ RSpec.describe EasyLogging do
       expect(TestLevelRetain2.logger.level).to eq(Logger::Severity::DEBUG)
     end
   end
+
+  describe 'formatter selection' do
+    let(:formatter) do
+      proc do |severity, datetime, progname, msg|
+        severity + datetime + progname + msg
+      end
+    end
+
+    it 'has a level setting of INFO by default' do
+      expect(TestClass.logger.formatter).to eq(nil)
+    end
+
+    it 'remembers selected formatter' do
+      easy_clone = EasyLogging.clone
+      easy_clone.formatter = formatter
+      expect(easy_clone.formatter).to eq(formatter)
+    end
+
+    it 'retains formatter between includes' do
+      EasyLogging.formatter = formatter
+      class TestFormatterRetain; end
+      TestFormatterRetain.send(:include, EasyLogging)
+
+      class TestFormatterRetain2; end
+      TestFormatterRetain2.send(:include, EasyLogging)
+
+      expect(TestFormatterRetain.logger.formatter).to eq(formatter)
+      expect(TestFormatterRetain2.logger.formatter).to eq(formatter)
+    end
+  end
 end
