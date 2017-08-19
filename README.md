@@ -37,6 +37,7 @@ Add `include EasyLogging` to any context (e.g. a class) you want to extend with 
 ```ruby
 require 'easy_logging'
 EasyLogging.log_destination = 'app.log'
+EasyLogging.level = Logger::DEBUG
 
 class YourClass
   include EasyLogging
@@ -68,13 +69,39 @@ I, [2017-06-03T21:59:25.160686 #5900]  INFO -- YourOtherClass: something happene
 
 ## Configuration
 
-\[Since [v0.2.0](https://github.com/thisismydesign/easy_logging/releases/tag/v0.2.0)]
+**Log settings are global for all loggers. Always configure EasyLogging before loading your application.**
 
-You can configure log destination as:
+#### Destination
 
-`EasyLogging.log_destination = 'app.log'`
+```ruby
+EasyLogging.log_destination = 'app.log'
+```
 
-Otherwise it will default to `STDOUT`.
+Default: `STDOUT`
+
+Since: [v0.2.0](https://github.com/thisismydesign/easy_logging/releases/tag/v0.2.0)
+
+#### Level
+
+```ruby
+EasyLogging.level = Logger::DEBUG
+```
+
+Default: `Logger::INFO`
+
+Since: [v0.3.0](https://github.com/thisismydesign/easy_logging/releases/tag/v0.3.0)
+
+#### Formatter
+
+```ruby
+EasyLogging.formatter = proc do |severity, datetime, progname, msg|
+ severity + datetime + progname + msg
+end
+```
+
+Default: Logger default
+
+Since: [v0.3.0](https://github.com/thisismydesign/easy_logging/releases/tag/v0.3.0)
 
 #### Changing configuration on the fly
 
