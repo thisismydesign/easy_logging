@@ -167,7 +167,7 @@ RSpec.describe EasyLogging do
     end
   end
 
-  context 'level selection' do
+  describe 'level selection' do
     it 'has a level setting of INFO by default' do
       expect(TestClass.logger.level).to eq(Logger::Severity::INFO)
     end
