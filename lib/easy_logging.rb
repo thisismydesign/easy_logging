@@ -5,6 +5,7 @@ require_relative "easy_logging/version"
 module EasyLogging
 
   @log_destination = STDOUT
+  @level = Logger::INFO
   @loggers = {}
 
   def logger
@@ -13,6 +14,10 @@ module EasyLogging
 
   def self.log_destination= dest
     @log_destination = dest
+  end
+
+  def self.level=(level)
+    @level = level
   end
 
 private
@@ -32,12 +37,17 @@ private
 
   def self.configure_logger_for(classname)
     logger = Logger.new(log_destination)
+    logger.level = level
     logger.progname = classname
     logger
   end
 
   def self.log_destination
     @log_destination
+  end
+
+  def self.level
+    @level
   end
 
 end
