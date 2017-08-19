@@ -76,10 +76,23 @@ You can configure log destination as:
 
 Otherwise it will default to `STDOUT`.
 
-Important notes:
-- Log destination setting is global for all loggers
-- It is recommended to require EasyLogging and set the logger up properly in the initial setup of your application before any logging activity
-- Changing log destination on the fly will affect all future and not yet used loggers, however already used ones will log to the original destination
+#### Changing configuration on the fly
+
+... is tricky but looking at the specs it's fairly easy to understand:
+
+```ruby
+describe 'on the fly modification of logger configuration' do
+  context 'class level logger' do
+    it 'uses old config if EasyLogging was included before config change'
+    it 'uses new config if EasyLogging was included after config change'
+  end
+
+  context 'instance level logger' do
+    it 'uses old config if instance was created before config change'
+    it 'uses new config if instance was created after config change'
+  end
+end
+```
 
 ## Feedback
 

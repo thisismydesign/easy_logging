@@ -89,13 +89,11 @@ RSpec.describe EasyLogging do
     end
 
     context 'messing with log_destination settings directly' do
-
       after :each do
         EasyLogging.log_destination = nil
       end
 
       context 'logging to files' do
-
         let(:log_file) { Tempfile.new('easy_logging') }
 
         after :each do
@@ -124,44 +122,6 @@ RSpec.describe EasyLogging do
 
           expect(get_device(TestDestinationRetain.logger).path).to eq(log)
           expect(get_device(TestDestinationRetain2.logger).path).to eq(log)
-        end
-
-        context 'on the fly modification of logger configuration' do
-
-          let(:old_log) { STDOUT }
-          let(:new_log) { log_file.path }
-
-          context 'modification of `EasyLogging.log_destination`' do
-            it 'uses new log_destination in new and not yet used loggers' do
-              EasyLogging.log_destination = old_log
-              class TestDirectLogChange;end
-              TestDirectLogChange.send(:include, EasyLogging)
-
-              class TestDirectLogChange2;end
-              EasyLogging.log_destination = new_log
-              TestDirectLogChange2.send(:include, EasyLogging)
-
-              expect(get_device(TestDirectLogChange2.logger).path).to eq(new_log)
-              expect(get_device(TestDirectLogChange.logger).path).to eq(new_log)
-            end
-
-            # TODO this is unexplained behaviour
-            it 'uses old log_destination in already used loggers' do
-              EasyLogging.log_destination = old_log
-              class TestDirectLogChange3;end
-              TestDirectLogChange3.send(:include, EasyLogging)
-
-              # 'Use' logger
-              TestDirectLogChange3.logger
-
-              class TestDirectLogChange4;end
-              EasyLogging.log_destination = new_log
-              TestDirectLogChange4.send(:include, EasyLogging)
-
-              expect(get_device(TestDirectLogChange4.logger).path).to eq(new_log)
-              expect(get_device(TestDirectLogChange3.logger).inspect.include?('STDOUT')).to be true
-            end
-          end
         end
       end
     end
@@ -227,6 +187,61 @@ RSpec.describe EasyLogging do
 
       expect(TestFormatterRetain.logger.formatter).to eq(formatter)
       expect(TestFormatterRetain2.logger.formatter).to eq(formatter)
+    end
+  end
+
+  describe 'on the fly modification of logger configuration' do
+    let(:old_level) { Logger::WARN }
+    let(:new_level) { Logger::ERROR }
+
+    after :each do
+      EasyLogging.level = Logger::INFO
+    end
+
+    context 'class level logger' do
+      it 'uses old config if EasyLogging was included before config change' do
+        EasyLogging.level = old_level
+        class TestConfigChange1; end
+        TestConfigChange1.send(:include, EasyLogging)
+
+        EasyLogging.level = new_level
+
+        expect(TestConfigChange1.logger.level).to eq(old_level)
+      end
+
+      it 'uses new config if EasyLogging was included after config change' do
+        EasyLogging.level = old_level
+        class TestConfigChange2; end
+
+        EasyLogging.level = new_level
+        TestConfigChange2.send(:include, EasyLogging)
+
+        expect(TestConfigChange2.logger.level).to eq(new_level)
+      end
+    end
+
+    context 'instance level logger' do
+      it 'uses old config if instance was created before config change' do
+        EasyLogging.level = old_level
+        class TestConfigChange3; end
+        TestConfigChange3.send(:include, EasyLogging)
+
+        instance = TestConfigChange3.new
+        EasyLogging.level = new_level
+
+        expect(instance.logger.level).to eq(old_level)
+      end
+
+      it 'uses new config if instance was created after config change' do
+        EasyLogging.level = old_level
+        class TestConfigChange4; end
+        TestConfigChange4.send(:include, EasyLogging)
+
+        EasyLogging.level = new_level
+        instance = TestConfigChange4.new
+
+        expect(instance.logger.level).to eq(new_level)
+      end
     end
   end
 end

@@ -4,6 +4,12 @@ require_relative "easy_logging/version"
 
 module EasyLogging
 
+  def initialize
+    super
+    # Initialize instance level logger at the time of instance creation
+    logger
+  end
+
   class << self; attr_accessor :log_destination, :level, :formatter; end
 
   @log_destination = STDOUT
@@ -30,6 +36,8 @@ private
     def base.logger
       @logger ||= EasyLogging.logger_for(self)
     end
+    # Initialize class level logger at the time of including
+    base.logger
   end
 
   # Global, memoized, lazy initialized instance of a logger
