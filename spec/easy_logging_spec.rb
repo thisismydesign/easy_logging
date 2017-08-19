@@ -106,14 +106,14 @@ RSpec.describe EasyLogging do
         it "retains `log_destination` between includes" do
           log = log_file.path
           EasyLogging.log_destination = log
-          class TestRetain;end
-          TestRetain.send(:include, EasyLogging)
+          class TestDestinationRetain; end
+          TestDestinationRetain.send(:include, EasyLogging)
 
-          class TestRetain2;end
-          TestRetain2.send(:include, EasyLogging)
-          
-          expect(get_device(TestRetain.logger).path).to eq(log)
-          expect(get_device(TestRetain2.logger).path).to eq(log)
+          class TestDestinationRetain2; end
+          TestDestinationRetain2.send(:include, EasyLogging)
+
+          expect(get_device(TestDestinationRetain.logger).path).to eq(log)
+          expect(get_device(TestDestinationRetain2.logger).path).to eq(log)
         end
 
         context "on the fly modification of logger configuration" do
@@ -170,14 +170,14 @@ RSpec.describe EasyLogging do
 
     it 'retains `level` between includes' do
       EasyLogging.level = Logger::Severity::DEBUG
-      class TestRetain; end
-      TestRetain.send(:include, EasyLogging)
+      class TestLevelRetain; end
+      TestLevelRetain.send(:include, EasyLogging)
 
-      class TestRetain2; end
-      TestRetain2.send(:include, EasyLogging)
+      class TestLevelRetain2; end
+      TestLevelRetain2.send(:include, EasyLogging)
 
-      expect(TestRetain.logger.level).to eq(Logger::Severity::DEBUG)
-      expect(TestRetain2.logger.level).to eq(Logger::Severity::DEBUG)
+      expect(TestLevelRetain.logger.level).to eq(Logger::Severity::DEBUG)
+      expect(TestLevelRetain2.logger.level).to eq(Logger::Severity::DEBUG)
     end
   end
 end
