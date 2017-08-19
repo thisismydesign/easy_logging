@@ -4,6 +4,8 @@ require_relative "easy_logging/version"
 
 module EasyLogging
 
+  class << self; attr_accessor :log_destination, :level; end
+
   @log_destination = STDOUT
   @level = Logger::INFO
   @loggers = {}
@@ -40,14 +42,6 @@ private
     logger.level = level
     logger.progname = classname
     logger
-  end
-
-  def self.log_destination
-    @log_destination
-  end
-
-  def self.level
-    @level
   end
 
 end

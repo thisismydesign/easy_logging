@@ -20,11 +20,21 @@ RSpec.describe EasyLogging do
     it 'has a logger' do
       expect(TestClass.new.respond_to?(:logger)).to be(true)
     end
+
+    it 'is not polluted by module variables' do
+      expect(TestClass.new.respond_to?(:level)).to be(false)
+      expect(TestClass.new.respond_to?(:log_destination)).to be(false)
+    end
   end
 
   describe 'class that includes EasyLogging' do
     it 'has a logger' do
       expect(TestClass.respond_to?(:logger)).to be(true)
+    end
+
+    it 'is not polluted by module variables' do
+      expect(TestClass.respond_to?(:level)).to be(false)
+      expect(TestClass.respond_to?(:log_destination)).to be(false)
     end
   end
 
