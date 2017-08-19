@@ -156,4 +156,28 @@ RSpec.describe EasyLogging do
       end
     end
   end
+
+  context 'level selection' do
+    it 'has a level setting of INFO by default' do
+      expect(TestClass.logger.level).to eq(Logger::Severity::INFO)
+    end
+
+    it 'remembers selected level' do
+      easy_clone = EasyLogging.clone
+      easy_clone.level = Logger::Severity::DEBUG
+      expect(easy_clone.level).to eq(Logger::Severity::DEBUG)
+    end
+
+    it 'retains `level` between includes' do
+      EasyLogging.level = Logger::Severity::DEBUG
+      class TestRetain; end
+      TestRetain.send(:include, EasyLogging)
+
+      class TestRetain2; end
+      TestRetain2.send(:include, EasyLogging)
+
+      expect(TestRetain.logger.level).to eq(Logger::Severity::DEBUG)
+      expect(TestRetain2.logger.level).to eq(Logger::Severity::DEBUG)
+    end
+  end
 end
