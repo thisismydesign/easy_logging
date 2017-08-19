@@ -1,11 +1,15 @@
 require "bundler/setup"
 
-require "coveralls"
-Coveralls.wear!
+require 'simplecov'
+require 'coveralls'
+SimpleCov.formatter = Coveralls::SimpleCov::Formatter
+SimpleCov.start do
+  add_filter 'spec/support'
+end
 
 require "easy_logging"
 
-require_relative 'spec_support.rb'
+require_relative 'support/spec_support.rb'
 include SpecSupport
 
 RSpec.configure do |config|
