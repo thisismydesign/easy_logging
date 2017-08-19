@@ -12,7 +12,7 @@ module EasyLogging
     @logger ||= EasyLogging.logger_for(self.class.name)
   end
 
-  def self.log_destination= dest
+  def self.log_destination=(dest)
     @log_destination = dest
   end
 
