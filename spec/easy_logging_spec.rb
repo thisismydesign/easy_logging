@@ -168,6 +168,11 @@ RSpec.describe EasyLogging do
   end
 
   describe 'level selection' do
+
+    after :each do
+      EasyLogging.level = Logger::INFO
+    end
+
     it 'has a level setting of INFO by default' do
       expect(TestClass.logger.level).to eq(Logger::Severity::INFO)
     end
@@ -196,6 +201,10 @@ RSpec.describe EasyLogging do
       proc do |severity, datetime, progname, msg|
         severity + datetime + progname + msg
       end
+    end
+
+    after :each do
+      EasyLogging.formatter = nil
     end
 
     it 'has a level setting of INFO by default' do
