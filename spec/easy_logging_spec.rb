@@ -16,19 +16,19 @@ RSpec.describe EasyLogging do
     end
   end
 
-  context "instance of a class that includes EasyLogging" do
+  describe "instance of a class that includes EasyLogging" do
     it "has a logger" do
       expect(TestClass.new.respond_to?(:logger)).to be(true)
     end
   end
 
-  context "class that includes EasyLogging" do
+  describe "class that includes EasyLogging" do
     it "has a logger" do
       expect(TestClass.respond_to?(:logger)).to be(true)
     end
   end
 
-  context "instance level logger" do
+  describe "instance level logger" do
     it "contains class name" do
       expect(TestClass.logger.progname).not_to eq(TestClass.class.name)
     end
@@ -47,7 +47,7 @@ RSpec.describe EasyLogging do
     end
   end
 
-  context "class level logger" do
+  describe "class level logger" do
     it "contains class name" do
       expect(TestClass.logger.progname).not_to eq(TestClass.class.name)
     end
@@ -66,7 +66,7 @@ RSpec.describe EasyLogging do
     end
   end
 
-  context 'selective output destination' do
+  describe 'output destination selection' do
 
     it "logs to STDOUT by default" do
       expect(get_device(TestClass.logger).inspect.include?("STDOUT")).to be true
