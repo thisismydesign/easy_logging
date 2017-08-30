@@ -18,10 +18,6 @@ module EasyLogging
   @level = Logger::INFO
   @loggers = {}
 
-  def logger
-    @logger ||= EasyLogging.logger_for(self.class.name)
-  end
-
   def self.log_destination=(dest)
     @log_destination = dest
   end
@@ -30,17 +26,21 @@ module EasyLogging
     @level = level
   end
 
-private
+  private_class_method
 
   # Executed when the module is included. See: https://stackoverflow.com/a/5160822/2771889
   def self.included(base)
     base.send :prepend, Initializer
-    # Class level logger method for includer class (base)
-    def base.logger
-      @logger ||= EasyLogging.logger_for(self)
+    # Class level private logger method for includer class (base)
+    class << base
+      private
+      def logger
+        @logger ||= EasyLogging.logger_for(self)
+      end
     end
+
     # Initialize class level logger at the time of including
-    base.logger
+    base.send (:logger)
   end
 
   # Global, memoized, lazy initialized instance of a logger
@@ -54,6 +54,12 @@ private
     logger.progname = classname
     logger.formatter = formatter unless formatter.nil?
     logger
+  end
+
+  private
+
+  def logger
+    @logger ||= EasyLogging.logger_for(self.class.name)
   end
 
 end

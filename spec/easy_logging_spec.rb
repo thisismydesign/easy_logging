@@ -18,7 +18,8 @@ RSpec.describe EasyLogging do
 
   describe 'instance of a class that includes EasyLogging' do
     it 'has a logger' do
-      expect(TestClass.new.respond_to?(:logger)).to be(true)
+      expect(TestClass.private_method_defined?(:logger)).to be_truthy
+      expect(TestClass.new.respond_to?(:logger)).to be_falsey
     end
 
     it 'is not polluted by module variables' do
@@ -59,8 +60,9 @@ RSpec.describe EasyLogging do
   end
 
   describe 'class that includes EasyLogging' do
-    it 'has a logger' do
-      expect(TestClass.respond_to?(:logger)).to be(true)
+    it 'has a private logger' do
+      expect(TestClass.singleton_class.private_instance_methods(false)).to include(:logger)
+      expect(TestClass.respond_to?(:logger)).to be(false)
     end
 
     it 'is not polluted by module variables' do
@@ -71,46 +73,46 @@ RSpec.describe EasyLogging do
 
   describe 'instance level logger' do
     it 'contains class name' do
-      expect(TestClass.logger.progname).not_to eq(TestClass.class.name)
+      expect(TestClass.send(:logger).progname).not_to eq(TestClass.class.name)
     end
 
     it 'outputs class name' do
-      expect { TestClass.new.logger.info }.to output(/.+#{TestClass.class.name}.+/).to_stdout_from_any_process
+      expect { TestClass.new.send(:logger).info }.to output(/.+#{TestClass.class.name}.+/).to_stdout_from_any_process
     end
 
     it 'can log to STDOUT' do
       msg = 'hi'
-      expect { TestClass.new.logger.info(msg) }.to output(/.+#{msg}$/).to_stdout_from_any_process
+      expect { TestClass.new.send(:logger).info(msg) }.to output(/.+#{msg}$/).to_stdout_from_any_process
     end
 
     it 'is specific to the class' do
-      expect(TestClass.new.logger.__id__).not_to eq(TestClass2.new.logger.__id__)
+      expect(TestClass.new.send(:logger).__id__).not_to eq(TestClass2.new.send(:logger).__id__)
     end
   end
 
   describe 'class level logger' do
     it 'contains class name' do
-      expect(TestClass.logger.progname).not_to eq(TestClass.class.name)
+      expect(TestClass.send(:logger).progname).not_to eq(TestClass.class.name)
     end
 
     it 'outputs class name' do
-      expect { TestClass.logger.info }.to output(/.+#{TestClass.class.name}.+/).to_stdout_from_any_process
+      expect { TestClass.send(:logger).info }.to output(/.+#{TestClass.class.name}.+/).to_stdout_from_any_process
     end
 
     it 'can log to STDOUT' do
       msg = 'hi'
-      expect { TestClass.logger.info(msg) }.to output(/.+#{msg}$/).to_stdout_from_any_process
+      expect { TestClass.send(:logger).info(msg) }.to output(/.+#{msg}$/).to_stdout_from_any_process
     end
 
     it 'is specific to the class' do
-      expect(TestClass.logger.__id__).not_to eq(TestClass2.logger.__id__)
+      expect(TestClass.send(:logger).__id__).not_to eq(TestClass2.send(:logger).__id__)
     end
   end
 
   describe 'output destination selection' do
 
     it 'logs to STDOUT by default' do
-      expect(get_device(TestClass.logger).inspect.include?('STDOUT')).to be true
+      expect(get_device(TestClass.send(:logger)).inspect.include?('STDOUT')).to be true
     end
 
     it 'remembers selected output destination' do
@@ -138,7 +140,7 @@ RSpec.describe EasyLogging do
           TestLogFile.send(:include, EasyLogging)
 
           msg = 'hi'
-          TestLogFile.logger.info(msg)
+          TestLogFile.send(:logger).info(msg)
           expect(log_file.read).to match(/.+#{msg}$/)
         end
 
@@ -151,8 +153,8 @@ RSpec.describe EasyLogging do
           class TestDestinationRetain2; end
           TestDestinationRetain2.send(:include, EasyLogging)
 
-          expect(get_device(TestDestinationRetain.logger).path).to eq(log)
-          expect(get_device(TestDestinationRetain2.logger).path).to eq(log)
+          expect(get_device(TestDestinationRetain.send(:logger)).path).to eq(log)
+          expect(get_device(TestDestinationRetain2.send(:logger)).path).to eq(log)
         end
       end
     end
@@ -165,7 +167,7 @@ RSpec.describe EasyLogging do
     end
 
     it 'has a level setting of INFO by default' do
-      expect(TestClass.logger.level).to eq(Logger::Severity::INFO)
+      expect(TestClass.send(:logger).level).to eq(Logger::Severity::INFO)
     end
 
     it 'remembers selected level' do
@@ -182,8 +184,8 @@ RSpec.describe EasyLogging do
       class TestLevelRetain2; end
       TestLevelRetain2.send(:include, EasyLogging)
 
-      expect(TestLevelRetain.logger.level).to eq(Logger::Severity::DEBUG)
-      expect(TestLevelRetain2.logger.level).to eq(Logger::Severity::DEBUG)
+      expect(TestLevelRetain.send(:logger).level).to eq(Logger::Severity::DEBUG)
+      expect(TestLevelRetain2.send(:logger).level).to eq(Logger::Severity::DEBUG)
     end
   end
 
@@ -199,7 +201,7 @@ RSpec.describe EasyLogging do
     end
 
     it 'has a level setting of INFO by default' do
-      expect(TestClass.logger.formatter).to eq(nil)
+      expect(TestClass.send(:logger).formatter).to eq(nil)
     end
 
     it 'remembers selected formatter' do
@@ -216,8 +218,8 @@ RSpec.describe EasyLogging do
       class TestFormatterRetain2; end
       TestFormatterRetain2.send(:include, EasyLogging)
 
-      expect(TestFormatterRetain.logger.formatter).to eq(formatter)
-      expect(TestFormatterRetain2.logger.formatter).to eq(formatter)
+      expect(TestFormatterRetain.send(:logger).formatter).to eq(formatter)
+      expect(TestFormatterRetain2.send(:logger).formatter).to eq(formatter)
     end
   end
 
@@ -237,7 +239,7 @@ RSpec.describe EasyLogging do
 
         EasyLogging.level = new_level
 
-        expect(TestConfigChange1.logger.level).to eq(old_level)
+        expect(TestConfigChange1.send(:logger).level).to eq(old_level)
       end
 
       it 'uses new config if EasyLogging was included after config change' do
@@ -247,7 +249,7 @@ RSpec.describe EasyLogging do
         EasyLogging.level = new_level
         TestConfigChange2.send(:include, EasyLogging)
 
-        expect(TestConfigChange2.logger.level).to eq(new_level)
+        expect(TestConfigChange2.send(:logger).level).to eq(new_level)
       end
     end
 
@@ -260,7 +262,7 @@ RSpec.describe EasyLogging do
         instance = TestConfigChange3.new
         EasyLogging.level = new_level
 
-        expect(instance.logger.level).to eq(old_level)
+        expect(instance.send(:logger).level).to eq(old_level)
       end
 
       it 'uses new config if instance was created after config change' do
@@ -271,7 +273,7 @@ RSpec.describe EasyLogging do
         EasyLogging.level = new_level
         instance = TestConfigChange4.new
 
-        expect(instance.logger.level).to eq(new_level)
+        expect(instance.send(:logger).level).to eq(new_level)
       end
     end
   end
