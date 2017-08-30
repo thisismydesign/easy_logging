@@ -4,10 +4,12 @@ require_relative "easy_logging/version"
 
 module EasyLogging
 
-  def initialize
-    super
+  module Initializer
     # Initialize instance level logger at the time of instance creation
-    logger
+    def initialize(*params)
+      super
+      logger
+    end
   end
 
   class << self; attr_accessor :log_destination, :level, :formatter; end
@@ -32,6 +34,7 @@ private
 
   # Executed when the module is included. See: https://stackoverflow.com/a/5160822/2771889
   def self.included(base)
+    base.send :prepend, Initializer
     # Class level logger method for includer class (base)
     def base.logger
       @logger ||= EasyLogging.logger_for(self)
