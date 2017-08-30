@@ -12,7 +12,7 @@
 - Adds logging functionality anywhere with one, short, descriptive command
 - Logger works in both class and instance methods
 - Logger is specific to class and contains class name
-- Logger is configurable to use standard streams or file
+- Logger is configurable (destination, level, formatter)
 
 ## Installation
 
