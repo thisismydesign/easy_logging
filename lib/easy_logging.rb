@@ -12,14 +12,24 @@ module EasyLogging
     end
   end
 
-  class << self; attr_accessor :log_destination, :level, :formatter; end
+  class << self
+    attr_reader :init_params, :log_destination
+    attr_accessor :level, :formatter
+  end
 
   @log_destination = STDOUT
+  @init_params = [@log_destination]
   @level = Logger::INFO
   @loggers = {}
 
+  def self.init(*params)
+    @init_params = params
+    @log_destination = params[0]
+  end
+
   def self.log_destination=(dest)
     @log_destination = dest
+    @init_params = @init_params.drop(1).unshift(dest)
   end
 
   def self.level=(level)
@@ -49,7 +59,7 @@ module EasyLogging
   end
 
   def self.configure_logger_for(classname)
-    logger = Logger.new(log_destination)
+    logger = Logger.new(*init_params)
     logger.level = level
     logger.progname = classname
     logger.formatter = formatter unless formatter.nil?

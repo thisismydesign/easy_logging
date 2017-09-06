@@ -25,6 +25,7 @@ RSpec.describe EasyLogging do
     it 'is not polluted by module variables' do
       expect(TestClass.new.respond_to?(:level)).to be(false)
       expect(TestClass.new.respond_to?(:log_destination)).to be(false)
+      expect(TestClass.new.respond_to?(:init)).to be(false)
     end
 
     it 'does not interfere with super without parameters' do
@@ -68,6 +69,7 @@ RSpec.describe EasyLogging do
     it 'is not polluted by module variables' do
       expect(TestClass.respond_to?(:level)).to be(false)
       expect(TestClass.respond_to?(:log_destination)).to be(false)
+      expect(TestClass.respond_to?(:init)).to be(false)
     end
   end
 
@@ -110,7 +112,6 @@ RSpec.describe EasyLogging do
   end
 
   describe 'output destination selection' do
-
     it 'logs to STDOUT by default' do
       expect(get_device(TestClass.send(:logger)).inspect.include?('STDOUT')).to be true
     end
@@ -136,7 +137,68 @@ RSpec.describe EasyLogging do
 
         it 'can log to file' do
           EasyLogging.log_destination = log_file.path
-          class TestLogFile;end
+          class TestLogFileDest ; end
+          TestLogFileDest.send(:include, EasyLogging)
+
+          msg = 'hi'
+          TestLogFileDest.send(:logger).info(msg)
+          expect(log_file.read).to match(/.+#{msg}$/)
+        end
+
+        it 'retains `log_destination` between includes' do
+          log = log_file.path
+          EasyLogging.log_destination = log
+          class TestDestinationRetainDest; end
+          TestDestinationRetainDest.send(:include, EasyLogging)
+
+          class TestDestinationRetain2Dest; end
+          TestDestinationRetain2Dest.send(:include, EasyLogging)
+
+          expect(get_device(TestDestinationRetainDest.send(:logger)).path).to eq(log)
+          expect(get_device(TestDestinationRetain2Dest.send(:logger)).path).to eq(log)
+        end
+      end
+    end
+  end
+
+  describe 'init params' do
+    it 'logs to STDOUT by default' do
+      expect(get_device(TestClass.send(:logger)).inspect.include?('STDOUT')).to be true
+    end
+
+    it 'forwards the init parameters to logger' do
+      EasyLogging.init('app.log', 'weekly')
+
+      class TestInitParams ; end
+      TestInitParams.send(:include, EasyLogging)
+
+      # Ugly, but at least ensures that EasyLogging actually proxies to Logging
+      expect(TestInitParams.send(:logger).instance_variable_get(:@logdev).filename).to eq 'app.log'
+      expect(TestInitParams.send(:logger).instance_variable_get(:@logdev).instance_variable_get(:@shift_age)).to eq 'weekly'
+    end
+
+    it 'remembers selected init parameters' do
+      easy_clone = EasyLogging.clone
+      easy_clone.init(STDOUT, 'weekly')
+      expect(easy_clone.init_params).to eq [STDOUT, 'weekly']
+    end
+
+    context 'messing with `init(*params)` settings directly' do
+      after :each do
+        EasyLogging.init(STDOUT)
+      end
+
+      context 'logging to files' do
+        let(:log_file) { Tempfile.new('easy_logging') }
+
+        after :each do
+          log_file.close
+          log_file.unlink
+        end
+
+        it 'can log to file' do
+          EasyLogging.init(log_file.path)
+          class TestLogFile ; end
           TestLogFile.send(:include, EasyLogging)
 
           msg = 'hi'
@@ -144,13 +206,13 @@ RSpec.describe EasyLogging do
           expect(log_file.read).to match(/.+#{msg}$/)
         end
 
-        it 'retains `log_destination` between includes' do
+        it 'retains `init(*params)` between includes' do
           log = log_file.path
-          EasyLogging.log_destination = log
-          class TestDestinationRetain; end
+          EasyLogging.init(log)
+          class TestDestinationRetain ; end
           TestDestinationRetain.send(:include, EasyLogging)
 
-          class TestDestinationRetain2; end
+          class TestDestinationRetain2 ; end
           TestDestinationRetain2.send(:include, EasyLogging)
 
           expect(get_device(TestDestinationRetain.send(:logger)).path).to eq(log)
@@ -161,7 +223,6 @@ RSpec.describe EasyLogging do
   end
 
   describe 'level selection' do
-
     after :each do
       EasyLogging.level = Logger::INFO
     end
