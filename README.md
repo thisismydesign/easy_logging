@@ -37,11 +37,11 @@ Add `include EasyLogging` to any context (e.g. a class) you want to extend with 
 ```ruby
 require 'easy_logging'
 EasyLogging.log_destination = 'app.log'
-# Alternatively, EasyLogging::init_params accepts the same parameters as
+# Alternatively, EasyLogging::init accepts the same parameters as
 # Logger::new. Thus,
 #   EasyLogging.log_destination = 'app.log'
 # is equivalent to
-#   EasyLogging.init_params('app.log')
+#   EasyLogging.init('app.log')
 EasyLogging.level = Logger::DEBUG
 
 class YourClass
@@ -114,7 +114,7 @@ List of parameters to be passed to `Logger::initialize`.
 Overrides `log_destination`, and is selectively overridden by `level` and `formatter`.
 
 ```ruby
-EasyLogging.init_params('app.log', 'daily')
+EasyLogging.init('app.log', 'daily')
 ```
 
 Default: `STDOUT`
