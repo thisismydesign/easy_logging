@@ -124,7 +124,7 @@ RSpec.describe EasyLogging do
 
     context 'messing with log_destination settings directly' do
       after :each do
-        EasyLogging.log_destination = nil
+        EasyLogging.log_destination = STDOUT
       end
 
       context 'logging to files' do
