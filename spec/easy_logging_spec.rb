@@ -223,7 +223,7 @@ RSpec.describe EasyLogging do
     end
   end
 
-  describe 'on the fly modification of logger configuration' do
+  describe 'on the fly modification of global logger configuration' do
     let(:old_level) { Logger::WARN }
     let(:new_level) { Logger::ERROR }
 

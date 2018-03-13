@@ -2,7 +2,7 @@
 
 #### Ruby utility that lets you include a unique logger anywhere easily, without redundancy.
 
-Inspired by [this StackOverflow thread](https://stackoverflow.com/questions/917566/ruby-share-logger-instance-among-module-classes/44348303) `EasyLogging` provides a way to add and configure unique loggers for any [context](https://ruby-doc.org/stdlib/libdoc/rdoc/rdoc/RDoc/Context.html) as an alternative to having a global logger (e.g. `Rails.logger`).
+Inspired by [this StackOverflow thread](https://stackoverflow.com/questions/917566/ruby-share-logger-instance-among-module-classes/44348303) `EasyLogging` provides an easy way to create and configure unique loggers for any [context](https://ruby-doc.org/stdlib/libdoc/rdoc/rdoc/RDoc/Context.html) as an alternative to having a global logger (e.g. `Rails.logger`). It uses the [native Ruby Logger from stdlib](http://ruby-doc.org/stdlib/libdoc/logger/rdoc/Logger.html) and has [no runtime dependencies](easy_logging.gemspec).
 
 | Branch | Status |
 | ------ | ------ |
@@ -11,7 +11,7 @@ Inspired by [this StackOverflow thread](https://stackoverflow.com/questions/9175
 
 ## Features
 
-- Adds logging functionality anywhere with one, short, descriptive command
+- Add logging functionality anywhere with one, short, descriptive command
 - Logger is unique to context and contains relevant information (e.g. class name)
 - Logger is pre-configurable globally (destination, level, formatter)
 - Logger is fully configurable locally
@@ -39,6 +39,7 @@ Add `include EasyLogging` to any context (e.g. a class) you want to extend with 
 
 ```ruby
 require 'easy_logging'
+# Global pre-configuration for every Logger instance
 EasyLogging.log_destination = 'app.log'
 EasyLogging.level = Logger::DEBUG
 
@@ -46,8 +47,7 @@ class YourClass
   include EasyLogging
 
   def do_something
-    # ...
-    logger.info 'something happened'
+    logger.debug('foo')
   end
 end
 
@@ -55,8 +55,14 @@ class YourOtherClass
   include EasyLogging
 
   def self.do_something
+    # Local custom Logger configuration
+    logger.formatter = proc do |severity, datetime, progname, msg|
+      "#{severity}: #{msg}\n"
+    end
+
     # ...
-    logger.info 'something happened'
+
+    logger.info('bar')
   end
 end
 
@@ -64,15 +70,15 @@ YourClass.new.do_something
 YourOtherClass.do_something
 ```
 
-Output:
+`app.log`:
 ```
-I, [2017-06-03T21:59:25.160686 #5900]  INFO -- YourClass: something happened
-I, [2017-06-03T21:59:25.160686 #5900]  INFO -- YourOtherClass: something happened
+D, [2018-03-13T13:35:40.337438 #44643] DEBUG -- YourClass: foo
+INFO: bar
 ```
 
-## Configuration
+## Global configuration
 
-**Log settings are global for all loggers. Always configure EasyLogging before loading your application.**
+**You should pre-configure EasyLogging before loading your application** (or refer to [Changing global configuration on the fly](#changing-global-configuration-on-the-fly)).
 
 #### Destination
 
@@ -98,7 +104,7 @@ Since: [v0.3.0](https://github.com/thisismydesign/easy_logging/releases/tag/v0.3
 
 ```ruby
 EasyLogging.formatter = proc do |severity, datetime, progname, msg|
- severity + datetime + progname + msg
+  severity + datetime + progname + msg
 end
 ```
 
@@ -106,12 +112,12 @@ Default: Logger default
 
 Since: [v0.3.0](https://github.com/thisismydesign/easy_logging/releases/tag/v0.3.0)
 
-#### Changing configuration on the fly
+#### Changing global configuration on the fly
 
 ... is tricky but looking at the specs it's fairly easy to understand:
 
 ```ruby
-describe 'on the fly modification of logger configuration' do
+describe 'on the fly modification of global logger configuration' do
   context 'class level logger' do
     it 'uses old config if EasyLogging was included before config change'
     it 'uses new config if EasyLogging was included after config change'
