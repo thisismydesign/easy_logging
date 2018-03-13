@@ -1,6 +1,8 @@
 # EasyLogging
 
-#### Ruby utility that lets you include logging anywhere easily, without redundancy.
+#### Ruby utility that lets you include a unique logger anywhere easily, without redundancy.
+
+Inspired by [this StackOverflow thread](https://stackoverflow.com/questions/917566/ruby-share-logger-instance-among-module-classes/44348303) `EasyLogging` provides a way to add and configure unique loggers for any [context](https://ruby-doc.org/stdlib/libdoc/rdoc/rdoc/RDoc/Context.html) as an alternative to having a global logger (e.g. `Rails.logger`).
 
 | Branch | Status |
 | ------ | ------ |
@@ -10,9 +12,10 @@
 ## Features
 
 - Adds logging functionality anywhere with one, short, descriptive command
-- Logger works in both class and instance methods
-- Logger is specific to class and contains class name
-- Logger is configurable (destination, level, formatter)
+- Logger is unique to context and contains relevant information (e.g. class name)
+- Logger is pre-configurable globally (destination, level, formatter)
+- Logger is fully configurable locally
+- The same syntax works in any context (e.g. class or instance methods)
 
 ## Installation
 
