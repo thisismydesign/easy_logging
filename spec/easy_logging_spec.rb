@@ -277,4 +277,50 @@ RSpec.describe EasyLogging do
       end
     end
   end
+
+  describe 'example in README' do
+    let(:log_file) { Tempfile.new('app.log') }
+
+    after :each do
+      log_file.close
+      log_file.unlink
+      EasyLogging.level = Logger::INFO
+      EasyLogging.log_destination = STDOUT
+    end
+
+
+    it 'produces expected output' do
+      # Global pre-configuration for every Logger instance
+      EasyLogging.log_destination = log_file.path
+      EasyLogging.level = Logger::DEBUG
+
+      class YourClass
+        include EasyLogging
+
+        def do_something
+          logger.debug('foo')
+        end
+      end
+
+      class YourOtherClass
+        include EasyLogging
+
+        def self.do_something
+          # Local custom Logger configuration
+          logger.formatter = proc do |severity, datetime, progname, msg|
+            "#{severity}: #{msg}\n"
+          end
+
+          # ...
+
+          logger.info('bar')
+        end
+      end
+
+      YourClass.new.do_something
+      YourOtherClass.do_something
+
+      expect(log_file.read).to match(/D, \[.*\] DEBUG -- YourClass: foo\nINFO: bar\n/)
+    end
+  end
 end

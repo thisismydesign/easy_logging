@@ -39,6 +39,7 @@ Add `include EasyLogging` to any context (e.g. a class) you want to extend with 
 
 ```ruby
 require 'easy_logging'
+
 # Global pre-configuration for every Logger instance
 EasyLogging.log_destination = 'app.log'
 EasyLogging.level = Logger::DEBUG
