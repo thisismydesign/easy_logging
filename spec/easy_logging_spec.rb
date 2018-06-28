@@ -167,7 +167,7 @@ RSpec.describe EasyLogging do
     end
 
     it 'forwards the init parameters to logger' do
-      EasyLogging.init('app.log', 'weekly')
+      EasyLogging.logger_params('app.log', 'weekly')
 
       class TestInitParams ; end
       TestInitParams.send(:include, EasyLogging)
@@ -179,13 +179,13 @@ RSpec.describe EasyLogging do
 
     it 'remembers selected init parameters' do
       easy_clone = EasyLogging.clone
-      easy_clone.init(STDOUT, 'weekly')
+      easy_clone.logger_params(STDOUT, 'weekly')
       expect(easy_clone.init_params).to eq [STDOUT, 'weekly']
     end
 
     context 'messing with `init(*params)` settings directly' do
       after :each do
-        EasyLogging.init(STDOUT)
+        EasyLogging.logger_params = STDOUT
       end
 
       context 'logging to files' do
@@ -197,7 +197,7 @@ RSpec.describe EasyLogging do
         end
 
         it 'can log to file' do
-          EasyLogging.init(log_file.path)
+          EasyLogging.logger_params = log_file.path
           class TestLogFile ; end
           TestLogFile.send(:include, EasyLogging)
 
@@ -208,7 +208,7 @@ RSpec.describe EasyLogging do
 
         it 'retains `init(*params)` between includes' do
           log = log_file.path
-          EasyLogging.init(log)
+          EasyLogging.logger_params = log
           class TestDestinationRetain ; end
           TestDestinationRetain.send(:include, EasyLogging)
 

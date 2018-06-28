@@ -13,23 +13,22 @@ module EasyLogging
   end
 
   class << self
-    attr_reader :init_params, :log_destination
-    attr_accessor :level, :formatter
+    attr_reader :log_destination
+    attr_accessor :level, :formatter, :logger_init_params
   end
 
-  @log_destination = STDOUT
-  @init_params = [@log_destination]
-  @level = Logger::INFO
   @loggers = {}
+  @logger_init_params = [STDOUT, level: Logger::INFO]
 
-  def self.init(*params)
-    @init_params = params
-    @log_destination = params[0]
+  def self.logger_params(*params)
+    p params
+    @logger_init_params = params
+    # TODO: other default settings should not overwrite logger params setting (e.g. level, etc)
+    @log_destination = @logger_init_params[0]
   end
 
   def self.log_destination=(dest)
-    @log_destination = dest
-    @init_params = @init_params.drop(1).unshift(dest)
+    @logger_init_params = @logger_init_params.drop(1).unshift(dest)
   end
 
   def self.level=(level)
@@ -50,7 +49,7 @@ module EasyLogging
     end
 
     # Initialize class level logger at the time of including
-    base.send (:logger)
+    base.send(:logger)
   end
 
   # Global, memoized, lazy initialized instance of a logger
@@ -59,8 +58,8 @@ module EasyLogging
   end
 
   def self.configure_logger_for(classname)
-    logger = Logger.new(*init_params)
-    logger.level = level
+    logger = Logger.new(*@logger_init_params)
+    logger.level = @level unless @level.nil?
     logger.progname = classname
     logger.formatter = formatter unless formatter.nil?
     logger
