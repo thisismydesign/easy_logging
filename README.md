@@ -131,21 +131,15 @@ describe 'on the fly modification of global logger configuration' do
 end
 ```
 
-## Feedback
+## Contribution and feedback
 
-Any feedback is much appreciated.
+This project is built around known use-cases. If you have one that isn't covered don't hesitate to open an issue and start a discussion.
 
-I can only tailor this project to fit use-cases I know about - which are usually my own ones. If you find that this might be the right direction to solve your problem too but you find that it's suboptimal or lacks features don't hesitate to contact me.
+Bug reports and pull requests are welcome on GitHub at https://github.com/thisismydesign/easy_logging. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
-Please let me know if you make use of this project so that I can prioritize further efforts.
+## Conventions
 
-## Development
-
-This gem is developed using Bundler conventions. A good overview can be found [here](http://bundler.io/v1.14/guides/creating_gem.html).
-
-## Contributing
-
-Bug reports and pull requests are welcome on GitHub at https://github.com/thisismydesign/easy_logging.
+This project follows [C-Hive guides](https://github.com/c-hive/guides) for code style, way of working and other development concerns.
 
 ## License
 
