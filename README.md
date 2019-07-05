@@ -11,7 +11,7 @@ Status and support
 - &#x2716; no ongoing development
 
 <!--- Version informartion -->
-*You are viewing the README of version [v0.4.0](https://github.com/thisismydesign/easy_logging/releases/tag/v0.4.0). You can find other releases [here](https://github.com/thisismydesign/easy_logging/releases).*
+*You are viewing the README of version [v0.4.0](/../../releases/tag/v0.4.0). You can find other releases [here](/../../releases).*
 <!--- Version informartion end -->
 
 | Branch | Status |
