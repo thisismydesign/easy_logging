@@ -4,6 +4,16 @@
 
 Inspired by [this StackOverflow thread](https://stackoverflow.com/questions/917566/ruby-share-logger-instance-among-module-classes/44348303) `EasyLogging` provides an easy way to create and configure unique loggers for any [context](https://ruby-doc.org/stdlib/libdoc/rdoc/rdoc/RDoc/Context.html) as an alternative to having a global logger (e.g. `Rails.logger`). It uses the [native Ruby Logger from stdlib](http://ruby-doc.org/stdlib/libdoc/logger/rdoc/Logger.html) and has [no runtime dependencies](easy_logging.gemspec).
 
+Status and support
+
+- &#x2714; stable
+- &#x2714; supported
+- &#x2716; no ongoing development
+
+<!--- Version informartion -->
+*You are viewing the README of version [v0.4.0](https://github.com/thisismydesign/easy_logging/releases/tag/v0.4.0). You can find other releases [here](https://github.com/thisismydesign/easy_logging/releases).*
+<!--- Version informartion end -->
+
 | Branch | Status |
 | ------ | ------ |
 | Release | [![Build Status](https://travis-ci.org/thisismydesign/easy_logging.svg?branch=release)](https://travis-ci.org/thisismydesign/easy_logging)   [![Coverage Status](https://coveralls.io/repos/github/thisismydesign/easy_logging/badge.svg?branch=release)](https://coveralls.io/github/thisismydesign/easy_logging?branch=release)   [![Gem Version](https://badge.fury.io/rb/easy_logging.svg)](https://badge.fury.io/rb/easy_logging)   [![Total Downloads](http://ruby-gem-downloads-badge.herokuapp.com/easy_logging?type=total)](https://rubygems.org/gems/easy_logging) |
